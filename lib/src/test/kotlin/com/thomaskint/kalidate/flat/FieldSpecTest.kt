@@ -5,7 +5,7 @@ import com.thomaskint.kalidate.ValidationError.Type
 import io.kotest.matchers.shouldBe
 import org.junit.Test
 
-class FieldSpecTest {
+internal class FieldSpecTest {
     data class TestPost(val username: String)
 
     @Test

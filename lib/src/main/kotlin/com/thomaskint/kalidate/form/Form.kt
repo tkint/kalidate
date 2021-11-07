@@ -2,6 +2,16 @@ package com.thomaskint.kalidate.form
 
 import com.thomaskint.kalidate.ValidationError
 import com.thomaskint.kalidate.ValidationError.Type.Builtin
+import com.thomaskint.kalidate.form.fields.KAny
+import com.thomaskint.kalidate.form.fields.KBoolean
+import com.thomaskint.kalidate.form.fields.KDouble
+import com.thomaskint.kalidate.form.fields.KField
+import com.thomaskint.kalidate.form.fields.KInteger
+import com.thomaskint.kalidate.form.fields.KString
+import com.thomaskint.kalidate.form.fields.KTypedField
+import com.thomaskint.kalidate.form.fields.max
+import com.thomaskint.kalidate.form.fields.maxDecimals
+import com.thomaskint.kalidate.form.fields.min
 import kotlin.reflect.KProperty1
 
 
