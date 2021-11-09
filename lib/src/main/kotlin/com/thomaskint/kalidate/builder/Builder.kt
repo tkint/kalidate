@@ -39,42 +39,38 @@ class ValidationBuilder<T : Any> internal constructor(private val path: String? 
         next(FieldSpec(field, type, test, path))
 
     // Common
-
     fun <U : Any> KProperty1<T, U?>.required(type: ValidationError.Type? = null) =
         spec(type ?: ValidationError.Type.Builtin.TOO_SMALL) { it != null }
 
     // Strings
-
-    @JvmName("stringMin")
+    @JvmName("builderStringMin")
     fun KProperty1<T, String?>.min(length: Int, type: ValidationError.Type? = null) =
         spec(type ?: ValidationError.Type.Builtin.TOO_SMALL) { it == null || it.length >= length }
 
-    @JvmName("stringMin")
+    @JvmName("builderStringMin")
     fun FieldSpec<T, String>.min(length: Int, type: ValidationError.Type? = null) = next(field.min(length, type))
 
-    @JvmName("stringMax")
+    @JvmName("builderStringMax")
     fun KProperty1<T, String?>.max(length: Int, type: ValidationError.Type? = null) =
         spec(type ?: ValidationError.Type.Builtin.TOO_BIG) { it == null || it.length <= length }
 
-    @JvmName("stringMax")
+    @JvmName("builderStringMax")
     fun FieldSpec<T, String>.max(length: Int, type: ValidationError.Type? = null) = next(field.max(length, type))
 
-
     // Numbers
-    @JvmName("numberMin")
+    @JvmName("builderNumberMin")
     fun <U : Number> KProperty1<T, U?>.min(limit: U, type: ValidationError.Type? = null) =
         spec(type ?: ValidationError.Type.Builtin.TOO_SMALL) { it == null || it.toDouble() >= limit.toDouble() }
 
-    @JvmName("numberMin")
+    @JvmName("builderNumberMin")
     fun <U : Number> FieldSpec<T, U>.min(limit: U, type: ValidationError.Type? = null) = next(field.min(limit, type))
 
-    @JvmName("numberMax")
+    @JvmName("builderNumberMax")
     fun <U : Number> KProperty1<T, U?>.max(limit: U, type: ValidationError.Type? = null) =
         spec(type ?: ValidationError.Type.Builtin.TOO_BIG) { it == null || it.toDouble() <= limit.toDouble() }
 
-    @JvmName("numberMax")
+    @JvmName("builderNumberMax")
     fun <U : Number> FieldSpec<T, U>.max(limit: U, type: ValidationError.Type? = null) = next(field.max(limit, type))
-
 }
 
 class Validation<T : Any> internal constructor(

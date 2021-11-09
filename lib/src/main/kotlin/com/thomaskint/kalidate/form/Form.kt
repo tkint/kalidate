@@ -14,7 +14,6 @@ import com.thomaskint.kalidate.form.fields.maxDecimals
 import com.thomaskint.kalidate.form.fields.min
 import kotlin.reflect.KProperty1
 
-
 class KForm private constructor(private val fields: List<KField<*>>) {
     fun validate(data: Map<String, Any>): List<ValidationError> = fields.map { field ->
         val value = data[field.name]
@@ -49,25 +48,24 @@ class KTypedForm<Receiver> private constructor(private val fields: List<KTypedFi
     fun validate(data: Receiver): List<ValidationError> = fields.map { field -> field.validateReceiver(data) }.flatten()
 
     class Builder<Receiver> {
-        private val fields: MutableList<KTypedField.Builder<Receiver, *, *>> = mutableListOf()
+        private val fields: MutableList<KTypedField.Builder<Receiver, *>> = mutableListOf()
 
-        fun <DataType, FieldType : KField<DataType>, BuilderType : KField.Builder<DataType, FieldType>> field(
-            builder: BuilderType,
+        fun <DataType : Any> field(
             property: KProperty1<Receiver, DataType?>,
-        ): KTypedField.Builder<Receiver, DataType, FieldType> =
-            KTypedField.Builder(builder, property).also { fields.add(it) }
+        ): KTypedField.Builder<Receiver, DataType> =
+            KTypedField.Builder(property).also { fields.add(it) }
 
-        fun string(property: KProperty1<Receiver, String?>): KTypedField.Builder<Receiver, String, KString> =
-            field(KString.Builder(property.name), property)
+        fun string(property: KProperty1<Receiver, String?>): KTypedField.Builder<Receiver, String> =
+            field(property)
 
-        fun boolean(property: KProperty1<Receiver, Boolean?>): KTypedField.Builder<Receiver, Boolean, KBoolean> =
-            field(KBoolean.Builder(property.name), property)
+        fun boolean(property: KProperty1<Receiver, Boolean?>): KTypedField.Builder<Receiver, Boolean> =
+            field(property)
 
-        fun integer(property: KProperty1<Receiver, Int?>): KTypedField.Builder<Receiver, Int, KInteger> =
-            field(KInteger.Builder(property.name), property)
+        fun integer(property: KProperty1<Receiver, Int?>): KTypedField.Builder<Receiver, Int> =
+            field(property)
 
-        fun double(property: KProperty1<Receiver, Double?>): KTypedField.Builder<Receiver, Double, KDouble> =
-            field(KDouble.Builder(property.name), property)
+        fun double(property: KProperty1<Receiver, Double?>): KTypedField.Builder<Receiver, Double> =
+            field(property)
 
         fun build() = KTypedForm(fields.map { it.build() })
     }

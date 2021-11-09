@@ -2,17 +2,15 @@ package com.thomaskint.kalidate.form.fields
 
 import com.thomaskint.kalidate.ValidationError
 
-abstract class KField<T> protected constructor(
+abstract class KField<DataType : Any> protected constructor(
     val name: String,
-    private val validators: List<(value: T?) -> ValidationError?>,
+    private val validators: List<(value: DataType?) -> ValidationError?>,
 ) {
-    constructor(field: KField<T>) : this(field.name, field.validators)
-
-    fun validate(value: T?): List<ValidationError> = validators.mapNotNull { it(value) }
+    fun validate(value: DataType?): List<ValidationError> = validators.mapNotNull { it(value) }
 
     fun error(type: ValidationError.Type) = ValidationError(type, name)
 
-    abstract class Builder<DataType, FieldType : KField<DataType>>(val name: String) {
+    abstract class Builder<DataType : Any, FieldType : KField<DataType>>(val name: String) {
         protected val validators: MutableList<(value: DataType?) -> ValidationError?> = mutableListOf()
 
         fun required(): Builder<DataType, FieldType> =

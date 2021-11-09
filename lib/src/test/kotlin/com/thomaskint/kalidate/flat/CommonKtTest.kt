@@ -3,7 +3,7 @@ package com.thomaskint.kalidate.flat
 import com.thomaskint.kalidate.ValidationError
 import com.thomaskint.kalidate.ValidationError.Type
 import io.kotest.matchers.shouldBe
-import org.junit.Test
+import org.junit.jupiter.api.Test
 
 internal class CommonKtTest {
     data class TestPost(val username: String)
