@@ -1,6 +1,7 @@
 package com.thomaskint.kalidate.form.fields
 
 import com.thomaskint.kalidate.ValidationError
+import com.thomaskint.kalidate.ValidationError.Type.Builtin
 
 abstract class KField<DataType : Any> protected constructor(
     val name: String,
@@ -14,7 +15,7 @@ abstract class KField<DataType : Any> protected constructor(
         protected val validators: MutableList<(value: DataType?) -> ValidationError?> = mutableListOf()
 
         fun required(): Builder<DataType, FieldType> =
-            spec(ValidationError.Type.Builtin.REQUIRED) { it == null }
+            spec(Builtin.REQUIRED) { it == null }
 
         fun spec(fn: (value: DataType?) -> ValidationError?): Builder<DataType, FieldType> =
             apply { validators.add(fn) }

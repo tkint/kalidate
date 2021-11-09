@@ -1,15 +1,17 @@
 package com.thomaskint.kalidate.form.fields
 
 import com.thomaskint.kalidate.ValidationError
+import com.thomaskint.kalidate.ValidationError.Type.Builtin
 import io.kotest.matchers.collections.shouldHaveSingleElement
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 internal class KTypedFieldTest {
-    data class TestItem(
+    private data class TestItem(
         val firstname: String,
         val lastname: String?,
+        val alive: Boolean,
         val age: Int,
         val height: Double,
     )
@@ -21,7 +23,7 @@ internal class KTypedFieldTest {
             val spec = KTypedField.Builder(TestItem::firstname).build()
 
             spec.validate(null) shouldHaveSingleElement ValidationError(
-                type = ValidationError.Type.Builtin.REQUIRED,
+                type = Builtin.REQUIRED,
                 path = "firstname",
             )
         }
@@ -42,6 +44,7 @@ internal class KTypedFieldTest {
             val item = TestItem(
                 firstname = "Jane",
                 lastname = null,
+                alive = true,
                 age = 25,
                 height = 170.0,
             )
@@ -68,7 +71,7 @@ internal class KTypedFieldTest {
                 .build()
 
             spec.validate("hello") shouldHaveSingleElement ValidationError(
-                type = ValidationError.Type.Builtin.TOO_SMALL,
+                type = Builtin.TOO_SMALL,
                 path = "firstname",
             )
         }
@@ -89,8 +92,32 @@ internal class KTypedFieldTest {
                 .build()
 
             spec.validate("hello world") shouldHaveSingleElement ValidationError(
-                type = ValidationError.Type.Builtin.TOO_BIG,
+                type = Builtin.TOO_BIG,
                 path = "firstname",
+            )
+        }
+    }
+
+    @Nested
+    inner class BooleanSpecsTest {
+        @Test
+        fun `value not valid when meet specs`() {
+            val spec = KTypedField.Builder(TestItem::alive)
+                .spec(Builtin.BAD_FORMAT) { it != true }
+                .build()
+
+            spec.validate(true) shouldBe emptyList()
+        }
+
+        @Test
+        fun `value is not valid when does not meet specs`() {
+            val spec = KTypedField.Builder(TestItem::alive)
+                .spec(Builtin.BAD_FORMAT) { it != true }
+                .build()
+
+            spec.validate(false) shouldHaveSingleElement ValidationError(
+                type = Builtin.BAD_FORMAT,
+                path = "alive",
             )
         }
     }
@@ -113,7 +140,7 @@ internal class KTypedFieldTest {
                 .build()
 
             spec.validate(5) shouldHaveSingleElement ValidationError(
-                type = ValidationError.Type.Builtin.TOO_SMALL,
+                type = Builtin.TOO_SMALL,
                 path = "age",
             )
         }
@@ -134,7 +161,7 @@ internal class KTypedFieldTest {
                 .build()
 
             spec.validate(15) shouldHaveSingleElement ValidationError(
-                type = ValidationError.Type.Builtin.TOO_BIG,
+                type = Builtin.TOO_BIG,
                 path = "age",
             )
         }
@@ -158,7 +185,7 @@ internal class KTypedFieldTest {
                 .build()
 
             spec.validate(5.0) shouldHaveSingleElement ValidationError(
-                type = ValidationError.Type.Builtin.TOO_SMALL,
+                type = Builtin.TOO_SMALL,
                 path = "height",
             )
         }
@@ -179,7 +206,7 @@ internal class KTypedFieldTest {
                 .build()
 
             spec.validate(15.0) shouldHaveSingleElement ValidationError(
-                type = ValidationError.Type.Builtin.TOO_BIG,
+                type = Builtin.TOO_BIG,
                 path = "height",
             )
         }
