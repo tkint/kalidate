@@ -2,6 +2,7 @@ package com.thomaskint.kalidate.form
 
 import com.thomaskint.kalidate.ValidationError
 import com.thomaskint.kalidate.ValidationError.Type.Builtin
+import com.thomaskint.kalidate.form.fields.min
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldHaveSingleElement
 import io.kotest.matchers.shouldBe
@@ -127,7 +128,7 @@ internal class KFormTest {
     @Test
     fun `form is valid when type of field is any`() {
         val form = KForm.Builder().apply {
-            field("test-any")
+            field<Any>("test-any")
         }.build()
 
         form.validate("test-any" to 12.0) shouldBe emptyList()
@@ -140,7 +141,7 @@ internal class KFormTest {
             boolean("test-boolean")
             integer("test-integer").min(10)
             double("test-double").min(10.0).required()
-            field("test-any").spec(Builtin.BAD_FORMAT) { it != "hello" }
+            field<String>("test-any").spec(Builtin.BAD_FORMAT) { it != "hello" }
         }.build()
 
         form.validate(
@@ -159,7 +160,7 @@ internal class KFormTest {
             boolean("test-boolean")
             integer("test-integer").min(10)
             double("test-double").min(10.0).required()
-            field("test-any").spec(Builtin.BAD_FORMAT) { it != "hello" }
+            field<String>("test-any").spec(Builtin.BAD_FORMAT) { it != "hello" }
         }.build()
 
         form.validate(
@@ -183,7 +184,7 @@ internal class KFormTest {
             boolean("test-boolean")
             integer("test-integer").min(10)
             double("test-double").min(10.0).required()
-            field("test-any").spec(Builtin.BAD_FORMAT) { it != "hello" }
+            field<String>("test-any").spec(Builtin.BAD_FORMAT) { it != "hello" }
         }.build()
 
         form.validate(
@@ -202,7 +203,7 @@ internal class KFormTest {
             boolean("test-boolean")
             integer("test-integer").min(10)
             double("test-double").min(10.0).required()
-            field("test-any").spec(Builtin.BAD_FORMAT) { it != "hello" }
+            field<String>("test-any").spec(Builtin.BAD_FORMAT) { it != "hello" }
         }.build()
 
         form.validate(

@@ -4,7 +4,7 @@ import com.thomaskint.kalidate.ValidationError
 import com.thomaskint.kalidate.form.fields.KTypedField
 import kotlin.reflect.KProperty1
 
-class KTypedForm<Receiver> private constructor(private val fields: List<KTypedField<Receiver, *, *>>) {
+class KTypedForm<Receiver> private constructor(private val fields: List<KTypedField<Receiver, *>>) {
     fun validate(data: Receiver): List<ValidationError> = fields.map { field -> field.validateReceiver(data) }.flatten()
 
     class Builder<Receiver> {

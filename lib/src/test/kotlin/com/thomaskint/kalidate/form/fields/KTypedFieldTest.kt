@@ -227,7 +227,7 @@ internal class KTypedFieldTest {
                 .build()
 
             spec.validate(10.5) shouldHaveSingleElement ValidationError(
-                type = KDouble.ErrorType.DECIMAL_PART_TOO_SMALL,
+                type = Builtin.BAD_FORMAT,
                 path = "height",
             )
         }
@@ -248,7 +248,7 @@ internal class KTypedFieldTest {
                 .build()
 
             spec.validate(10.555) shouldHaveSingleElement ValidationError(
-                type = KDouble.ErrorType.DECIMAL_PART_TOO_BIG,
+                type = Builtin.BAD_FORMAT,
                 path = "height",
             )
         }
